@@ -82,5 +82,5 @@ npm run dev:web
 ```
 
 ## 이전 버전
-Frontend : https://contest-v44h.vercel.app/
+Frontend : https://contest-v44h.vercel.app/  
 Backend : https://contest-beta.vercel.app/
