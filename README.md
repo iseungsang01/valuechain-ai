@@ -80,3 +80,6 @@ npm run dev:web
 # 백엔드 (apps/api 셋업 후)
 # T1.3 완료 시 추가 예정
 ```
+
+## 이전 버전
+https://contest-v44h.vercel.app/
