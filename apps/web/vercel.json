@@ -3,5 +3,13 @@
   "buildCommand": "npm run build",
   "installCommand": "cd ../.. && npm install",
   "framework": "nextjs",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_BASE_URL": "https://contest2-production.up.railway.app"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://contest2-production.up.railway.app"
+  }
 }

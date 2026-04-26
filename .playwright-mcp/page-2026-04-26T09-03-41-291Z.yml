@@ -1,0 +1,64 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "ValueChain AI" [level=1] [ref=e5]
+        - paragraph [ref=e6]: 공급망 정합성 & 충돌 탐지
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - combobox [ref=e9]:
+            - option "Memory Semiconductor" [selected]
+            - option "Display OLED"
+            - option "Secondary Battery"
+          - combobox [ref=e10]:
+            - option "2024 Q3" [selected]
+            - option "2024 Q4"
+            - option "2025 Q1"
+        - button "분석 시작" [ref=e11]
+    - generic [ref=e12]:
+      - generic [ref=e14]:
+        - generic:
+          - paragraph: 토폴로지 미리보기
+          - paragraph: 7개 기업, 11개 거래 관계
+          - paragraph: "\"분석 시작\"을 눌러 시작하세요"
+        - application [ref=e15]:
+          - img
+          - generic "Control Panel" [ref=e18]:
+            - button "Zoom In" [ref=e19] [cursor=pointer]:
+              - img [ref=e20]
+            - button "Zoom Out" [ref=e22] [cursor=pointer]:
+              - img [ref=e23]
+            - button "Fit View" [ref=e25] [cursor=pointer]:
+              - img [ref=e26]
+            - button "Toggle Interactivity" [ref=e28] [cursor=pointer]:
+              - img [ref=e29]
+          - img "Mini Map" [ref=e32]
+          - link "React Flow attribution" [ref=e34] [cursor=pointer]:
+            - /url: https://reactflow.dev
+            - text: React Flow
+      - generic [ref=e37]:
+        - heading "에이전트 사고" [level=2] [ref=e39]:
+          - img [ref=e40]
+          - text: 에이전트 사고
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - heading "StructureMapper" [level=3] [ref=e45]
+              - generic [ref=e46]: 대기 중
+            - generic [ref=e48]: 입력 대기 중...
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - heading "DataCollector" [level=3] [ref=e51]
+              - generic [ref=e52]: 대기 중
+            - generic [ref=e54]: 입력 대기 중...
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - heading "QuantEstimator" [level=3] [ref=e57]
+              - generic [ref=e58]: 대기 중
+            - generic [ref=e60]: 입력 대기 중...
+          - generic [ref=e61]:
+            - generic [ref=e62]:
+              - heading "Evaluator" [level=3] [ref=e63]
+              - generic [ref=e64]: 대기 중
+            - generic [ref=e66]: 입력 대기 중...
+  - alert [ref=e67]
