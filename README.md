@@ -4,6 +4,8 @@
 
 투자자, 애널리스트, 기관 리서처를 위한 AI 기반 공급망 정합성 검증 + 미래 수급 충돌 탐지 플랫폼.
 
+https://glaze-frost-837.notion.site/ValueChain-AI-34e9306873568088a656c2a249889131?source=copy_link
+
 ## 핵심 가치
 
 - **Network Consistency**: 공급망 전체에서 A의 매출 ≈ B의 매입 정합성 자동 검증
