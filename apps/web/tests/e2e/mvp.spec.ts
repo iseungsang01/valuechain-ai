@@ -106,20 +106,26 @@ test.describe('MVP - Memory Semi 2024Q3 workflow', () => {
     const allEdges = await page.locator('.react-flow__edge').all();
     expect(allEdges.length).toBeGreaterThanOrEqual(EXPECTED_MIN_EDGES);
 
-    // edge-conflict 클래스가 적어도 1개 (severity high/medium) 또는
-    // 엣지 hover 시 EdgeTooltip 노출 → 정합성 오차 1건 이상 보장
-    // 데모 fixture 기준 3건 → 적어도 1건 검출
-    const conflictEdges = page.locator('.react-flow__edge.edge-conflict');
-    const conflictCount = await conflictEdges.count();
-    // 데모 fixture 3건 보장 ≥ 1
+    // edge-conflict 클래스가 적어도 1개 (severity high/medium).
+    // React Flow 는 BaseEdge.className 을 inner <path> 에 적용 → descendant 셀렉터.
+    // 데모 fixture 기준 3건 reconciliation_error → 적어도 1건 검출.
+    const conflictPaths = page.locator(
+      '.react-flow__edge .edge-conflict, .react-flow__edge-path.edge-conflict',
+    );
+    const conflictCount = await conflictPaths.count();
     expect(conflictCount).toBeGreaterThanOrEqual(EXPECTED_MIN_RECON_ERRORS);
   });
 
   test('초기 상태에서 Topology Preview 안내 표시', async ({ page }) => {
     await page.goto('/dashboard');
-    // 초기에는 그래프 비어있음 - "Click Run Analysis" 안내 메시지 노출
+    // 초기에는 그래프 비어있음 - 안내 메시지 노출
     await expect(page.getByText('Topology Preview')).toBeVisible();
-    await expect(page.getByText(/Run Analysis/)).toBeVisible();
+    // "Click 'Run Analysis' to begin" 안내 (버튼 텍스트와 구분 위해 paragraph 매칭)
+    await expect(
+      page.getByText(/Click "Run Analysis" to begin/),
+    ).toBeVisible();
+    // run 버튼은 testid 로 분리
+    await expect(page.getByTestId('run-button')).toHaveText('Run Analysis');
   });
 
   test('Sector / Quarter 선택 변경이 가능 (idle 상태)', async ({ page }) => {

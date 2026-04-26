@@ -195,8 +195,11 @@ export function useAgentStream() {
             throw err;
           },
           onclose() {
-            // 정상 close 시점은 onmessage 에서 terminatedRef 가 true 가 됨.
-            // 그렇지 않으면 onerror 처럼 재연결 후보.
+            // pipeline_complete / 비-retriable error 를 받지 못한 채 close 발생
+            // → 의도하지 않은 끊김으로 간주하고 reconnect 분기 트리거.
+            if (!terminatedRef.current && !userStoppedRef.current) {
+              throw new Error('SSE_UNEXPECTED_CLOSE');
+            }
           },
         });
       } catch (err) {

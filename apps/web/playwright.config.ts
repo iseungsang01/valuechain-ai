@@ -59,28 +59,33 @@ export default defineConfig({
 
   webServer: [
     {
-      // Next.js - production build 후 start (dev 보다 안정)
+      // Next.js - production build 후 start.
+      // 빌드 시 NEXT_PUBLIC_API_BASE_URL 가 inline 됨 → 기본값 'http://localhost:8000' 사용.
       command: 'npm run start',
       cwd: __dirname,
-      url: 'http://localhost:3000',
+      port: 3000,
       reuseExistingServer: !isCI,
       timeout: 120_000,
       stdout: 'pipe',
       stderr: 'pipe',
-      env: {
-        NEXT_PUBLIC_API_BASE_URL: 'http://localhost:8000',
-      },
     },
     {
       // FastAPI - apps/api/.venv 의 uvicorn 사용.
       // LangGraph + Pydantic + httpx 임포트가 무거워 cold start 가 길어질 수 있음 (Windows).
-      command: `"${apiVenvPython}" -m uvicorn main:app --host 127.0.0.1 --port 8000 --no-access-log`,
+      // CORS 는 settings.py 기본값 (localhost:3000, localhost:8000) 으로 충분.
+      command: `"${apiVenvPython}" -m uvicorn main:app --host 0.0.0.0 --port 8000 --no-access-log`,
       cwd: path.resolve(repoRoot, 'apps', 'api'),
-      url: 'http://localhost:8000/api/health',
+      // 포트 probe (URL probe 가 Windows 에서 hang 하는 이슈 회피)
+      port: 8000,
       reuseExistingServer: !isCI,
       timeout: 180_000,
       stdout: 'pipe',
       stderr: 'pipe',
+      env: {
+        // CORS - localhost 두 포트 + 127.0.0.1 도 허용 (브라우저 분기 안전)
+        CORS_ORIGINS:
+          'http://localhost:3000,http://localhost:8000,http://127.0.0.1:3000,http://127.0.0.1:8000',
+      },
     },
   ],
 });
