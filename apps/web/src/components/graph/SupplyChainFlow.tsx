@@ -166,10 +166,10 @@ export function SupplyChainFlow() {
     <div className="h-full w-full relative rounded-lg border border-foreground/10 bg-background/50 overflow-hidden">
       {nodes.length === 0 ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-foreground/50 z-10 pointer-events-none">
-          <p className="text-lg font-medium mb-2">Topology Preview</p>
-          <p className="text-sm">7 companies, 11 trade relationships</p>
+          <p className="text-lg font-medium mb-2">토폴로지 미리보기</p>
+          <p className="text-sm">7개 기업, 11개 거래 관계</p>
           <p className="text-xs mt-4 opacity-70">
-            Click &quot;Run Analysis&quot; to begin
+            &quot;분석 시작&quot;을 눌러 시작하세요
           </p>
         </div>
       ) : null}

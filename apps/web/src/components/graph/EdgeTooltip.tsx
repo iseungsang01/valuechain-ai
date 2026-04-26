@@ -42,16 +42,16 @@ function EdgeTooltipComponent({
       
       <div className="space-y-1.5">
         <div className="flex justify-between">
-          <span className="text-foreground/60">Supplier Revenue:</span>
+          <span className="text-foreground/60">공급사 매출:</span>
           <span className="font-mono">{formatUsd(supplierRevenue)}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-foreground/60">Buyer Cost:</span>
+          <span className="text-foreground/60">구매사 비용:</span>
           <span className="font-mono">{formatUsd(buyerCost)}</span>
         </div>
         
         <div className="flex justify-between items-center pt-1 mt-1 border-t border-foreground/5">
-          <span className="text-foreground/60">Gap:</span>
+          <span className="text-foreground/60">오차:</span>
           <span className={`font-mono font-bold ${severityColor}`}>
             {formatPct(gapPct)}
           </span>

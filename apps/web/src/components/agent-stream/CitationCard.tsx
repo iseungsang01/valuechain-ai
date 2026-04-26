@@ -11,7 +11,7 @@ interface CitationCardProps {
 function CitationCardComponent({ id, url, type = 'DART', date, snippet }: CitationCardProps) {
   const [expanded, setExpanded] = useState(false);
   
-  const displaySnippet = snippet || 'No snippet available.';
+  const displaySnippet = snippet || '표시할 내용이 없습니다.';
   const isLong = displaySnippet.length > 100;
   
   return (
@@ -35,7 +35,7 @@ function CitationCardComponent({ id, url, type = 'DART', date, snippet }: Citati
         </p>
         {!expanded && isLong && (
           <span className="text-brand-primary dark:text-brand-accent text-[10px] mt-1 inline-block font-medium">
-            Read more...
+            더 보기...
           </span>
         )}
       </div>
@@ -48,7 +48,7 @@ function CitationCardComponent({ id, url, type = 'DART', date, snippet }: Citati
             rel="noopener noreferrer"
             className="text-brand-primary dark:text-brand-accent hover:underline flex items-center gap-1"
           >
-            <span>Source Document</span>
+            <span>출처 문서</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
