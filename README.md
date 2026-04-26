@@ -86,7 +86,7 @@ npm run dev:web
 ## 이전 버전 (초기 아이디어)
 Feedback loop를 기반으로 한 부품사 - 동사 - 고객사 구조의 매출, 비용 추정 (but, P, Q를 구하는 과정이 생각보다 정확하지 않아서 포기)  
 
-<img width="720" height="400" alt="image" src="https://github.com/user-attachments/assets/cae7078a-f96a-48ad-8a49-a7f9890f648f" />
+<img width="720" height="400" alt="image" src="https://github.com/user-attachments/assets/cae7078a-f96a-48ad-8a49-a7f9890f648f"/>  
   
   
 Frontend : https://contest-v44h.vercel.app/  
