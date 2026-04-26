@@ -34,10 +34,10 @@ export default function DashboardPage() {
   };
 
   const buttonLabel = (() => {
-    if (status === 'streaming') return 'Stop Analysis';
-    if (status === 'connecting') return 'Connecting...';
-    if (status === 'reconnecting') return `Reconnecting ${reconnectAttempt}/${maxReconnects}`;
-    return 'Run Analysis';
+    if (status === 'streaming') return '분석 중지';
+    if (status === 'connecting') return '연결 중...';
+    if (status === 'reconnecting') return `재연결 중 ${reconnectAttempt}/${maxReconnects}`;
+    return '분석 시작';
   })();
 
   return (
@@ -50,7 +50,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-xl font-bold text-foreground">ValueChain AI</h1>
           <p className="text-xs text-foreground/60 mt-1">
-            Supply Chain Reconciliation &amp; Conflict Detection
+            공급망 정합성 &amp; 충돌 탐지
           </p>
         </div>
 

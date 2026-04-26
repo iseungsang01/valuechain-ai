@@ -7,7 +7,7 @@ export default function HomePage() {
       <p className="max-w-2xl text-center text-lg text-foreground/70">
         공급망 기반 기업 재무 추정 및 예측 에이전트.
         <br />
-        Network Consistency · Forward Conflict · Self-Optimization
+        네트워크 정합성 · 미래 충돌 · 자가 최적화
       </p>
       <Link
         href="/dashboard"

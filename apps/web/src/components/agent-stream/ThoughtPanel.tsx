@@ -52,7 +52,7 @@ function ThoughtPanelComponent({ events, status }: ThoughtPanelProps) {
             <polyline points="4 17 10 11 4 5"></polyline>
             <line x1="12" y1="19" x2="20" y2="19"></line>
           </svg>
-          Agent Thoughts
+          에이전트 사고
         </h2>
         
         {status === 'streaming' && (
@@ -61,7 +61,7 @@ function ThoughtPanelComponent({ events, status }: ThoughtPanelProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary dark:bg-brand-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-primary dark:bg-brand-accent"></span>
             </span>
-            Live Stream
+            실시간 스트림
           </div>
         )}
       </div>

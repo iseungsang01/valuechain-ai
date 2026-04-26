@@ -21,17 +21,17 @@ function AgentColumnComponent({ name, events, isActive, isComplete, hasError }: 
   }, [events]);
 
   let statusColor = 'bg-foreground/10 text-foreground/50';
-  let statusText = 'Waiting';
+  let statusText = '대기 중';
   
   if (hasError) {
     statusColor = 'bg-red-500/20 text-red-500';
-    statusText = 'Error';
+    statusText = '오류';
   } else if (isComplete) {
     statusColor = 'bg-green-500/20 text-green-500';
-    statusText = 'Complete ✓';
+    statusText = '완료 ✓';
   } else if (isActive) {
     statusColor = 'bg-brand-primary/20 text-brand-primary dark:text-brand-accent animate-pulse';
-    statusText = 'Running...';
+    statusText = '실행 중...';
   }
 
   return (
@@ -78,7 +78,7 @@ function AgentColumnComponent({ name, events, isActive, isComplete, hasError }: 
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-foreground/5 border border-foreground/10 rounded-lg p-2 text-xs font-mono"
                 >
-                  <div className="text-foreground/50 mb-1">🔧 Tool Call</div>
+                  <div className="text-foreground/50 mb-1">🔧 도구 호출</div>
                   <div className="text-brand-primary dark:text-brand-accent font-bold">
                     {event.tool_name}
                   </div>
@@ -89,7 +89,7 @@ function AgentColumnComponent({ name, events, isActive, isComplete, hasError }: 
             if (event.type === 'error') {
               // T4.2: ErrorEvent 페이로드 = { category, error_code, message, retriable }
               const errorCode = event.payload?.error_code ?? 'UNKNOWN';
-              const errorMsg = event.payload?.message ?? 'Unknown error';
+              const errorMsg = event.payload?.message ?? '알 수 없는 오류';
               return (
                 <motion.div
                   key={event.event_id}
@@ -97,7 +97,7 @@ function AgentColumnComponent({ name, events, isActive, isComplete, hasError }: 
                   animate={{ opacity: 1 }}
                   className="bg-red-500/10 border border-red-500/20 rounded-lg p-2.5 text-sm text-red-500"
                 >
-                  <div className="font-bold mb-1">Error: {errorCode}</div>
+                  <div className="font-bold mb-1">오류: {errorCode}</div>
                   <p>{errorMsg}</p>
                 </motion.div>
               );

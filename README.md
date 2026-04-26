@@ -108,12 +108,14 @@ Phase 1 MVP (4주) - 자세한 태스크는 [`.sisyphus/plans/valuechain-ai-arch
 
 **Week 3 합격 기준**: ✅ SSE 스트리밍 + 시각화 + 출처 표시 모두 작동 (110/110 backend tests pass, frontend build clean)
 
-### Week 4 ⏳ - 마무리 + 검증
+### Week 4 ✅ - 마무리 + 검증
 
-- [ ] T4.1 E2E 시나리오: 메모리 반도체 2024Q3 워크플로우
-- [ ] T4.2 에러 처리 + Fallback
-- [ ] T4.3 데모 시드 데이터 + 성능 측정
-- [ ] T4.4 데모 자료 + 회고
+- [x] T4.1 E2E 시나리오: 메모리 반도체 2024Q3 워크플로우 (Playwright Chromium + Firefox 18/18)
+- [x] T4.2 에러 처리 + Fallback (분류된 에러 핸들러 + ErrorBoundary + AgentErrorPanel + SSE 자동 재연결 3회)
+- [x] T4.3 데모 시드 데이터 + 성능 측정 (`scripts/seed_demo.py` + `scripts/benchmark.py`, TTFGraph p95 < 0.02s)
+- [x] T4.4 데모 자료 + 회고 ([`docs/MVP_DEMO.md`](./docs/MVP_DEMO.md), [`docs/RETROSPECTIVE.md`](./docs/RETROSPECTIVE.md))
+
+**Week 4 합격 기준**: ✅ TTFGraph SLA 충족 (p95 < 60s), 에러 처리 견고 (25 백엔드 + 6 E2E 테스트), 시연 가능 상태 (135/135 backend + 18/18 E2E pass)
 
 ## 라이선스
 
