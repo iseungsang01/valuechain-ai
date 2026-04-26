@@ -83,6 +83,8 @@ npm run dev:web
 # T1.3 완료 시 추가 예정
 ```
 
-## 이전 버전
+## 이전 버전 (초기 아이디어)
+<img width="1918" height="963" alt="pic_a" src="https://github.com/user-attachments/assets/08aef20f-7ba4-49f0-9d56-186e9a659dc0" />
+
 Frontend : https://contest-v44h.vercel.app/  
-Backend : https://contest-beta.vercel.app/
+Backend : http://localhost:8000/ (직접 구동 필요)
