@@ -109,7 +109,7 @@ function AgentColumnComponent({ name, events, isActive, isComplete, hasError }: 
         
         {events.length === 0 && !isActive && !isComplete && (
           <div className="text-center text-foreground/30 text-xs mt-10">
-            Waiting for input...
+            입력 대기 중...
           </div>
         )}
       </div>
