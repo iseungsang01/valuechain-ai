@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+/* React Flow base styles */
+@import '@xyflow/react/dist/style.css';
+
+/* Tailwind v4 - CSS-first config */
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Pretendard, 'Apple SD Gothic Neo', Roboto,
+    'Noto Sans KR', sans-serif;
+
+  --color-background: oklch(0.98 0 0);
+  --color-foreground: oklch(0.15 0 0);
+
+  /* ValueChain 브랜드 컬러: 진한 네이비 + 액센트 옥색 */
+  --color-brand-primary: oklch(0.32 0.08 260);
+  --color-brand-accent: oklch(0.65 0.15 195);
+
+  /* Forward Conflict 시각화 */
+  --color-conflict-low: oklch(0.85 0.15 95); /* 노랑 */
+  --color-conflict-high: oklch(0.65 0.22 25); /* 주황/빨강 */
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(0.12 0 0);
+    --color-foreground: oklch(0.95 0 0);
+  }
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+/* Forward Conflict 깜빡임 애니메이션 (V2 활성화) */
+@keyframes conflict-blink {
+  0%, 100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.4;
+  }
+}
+
+.edge-conflict {
+  animation: conflict-blink 1.5s ease-in-out infinite;
+  stroke-dasharray: 6 4;
+}

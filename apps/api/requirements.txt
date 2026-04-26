@@ -1,0 +1,17 @@
+# Pinned for Railway / production deploy.
+# 개발에선 `pip install -e .[dev]` (pyproject.toml dev extras) 권장.
+fastapi>=0.115.0,<0.116.0
+uvicorn[standard]>=0.32.0,<0.33.0
+sse-starlette>=2.1.3,<4.0.0
+pydantic>=2.9.2,<3.0.0
+pydantic-settings>=2.6.0,<3.0.0
+httpx>=0.27.2,<1.0.0
+python-dotenv>=1.0.1,<2.0.0
+supabase>=2.10.0,<3.0.0
+psycopg[binary]>=3.2.3,<4.0.0
+google-genai>=0.3.0,<2.0.0
+langgraph>=0.2.50,<1.0.0
+langgraph-checkpoint>=2.0.0,<3.0.0
+langgraph-checkpoint-postgres>=2.0.0,<3.0.0
+tenacity>=9.0.0,<10.0.0
+structlog>=24.4.0,<26.0.0

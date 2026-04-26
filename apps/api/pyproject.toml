@@ -1,0 +1,63 @@
+[project]
+name = "valuechain-api"
+version = "0.1.0"
+description = "ValueChain AI - Backend API (FastAPI + LangGraph + Gemini)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sse-starlette>=2.1.3",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.0",
+    "httpx>=0.27.2",
+    "python-dotenv>=1.0.1",
+    # Supabase / DB
+    "supabase>=2.10.0",
+    "psycopg[binary]>=3.2.3",
+    # LLM / Agents (T2.1+)
+    "google-genai>=0.3.0",
+    "langgraph>=0.2.50",
+    "langgraph-checkpoint>=2.0.0",
+    "langgraph-checkpoint-postgres>=2.0.0",
+    # Utilities
+    "tenacity>=9.0.0",  # retry
+    "structlog>=24.4.0",  # 구조화 로그
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "pytest-httpx>=0.35.0",
+    "ruff>=0.7.4",
+    "mypy>=1.13.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["tests*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "DTZ", "T20", "SIM", "ARG"]
+ignore = ["E501"]  # line length: ruff formatter handles
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
