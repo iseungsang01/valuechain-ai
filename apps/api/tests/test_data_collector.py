@@ -188,7 +188,7 @@ def _config(deps: PipelineDeps) -> dict[str, Any]:
 
 @pytest.mark.asyncio
 async def test_collector_upserts_companies_and_edges() -> None:
-    """토폴로지 7개 회사 + 11개 엣지가 repo 에 모두 들어감."""
+    """토폴로지 13개 회사 + 24개 엣지가 repo 에 모두 들어감."""
     repo = InMemoryRepository()
     deps = PipelineDeps(
         repo=repo,
@@ -198,8 +198,8 @@ async def test_collector_upserts_companies_and_edges() -> None:
 
     await data_collection_node(_initial_state(), _config(deps))
 
-    assert len(repo.list_companies()) == 7
-    assert len(repo.list_edges()) == 11
+    assert len(repo.list_companies()) == 13
+    assert len(repo.list_edges()) == 24
 
 
 @pytest.mark.asyncio
@@ -415,8 +415,8 @@ async def test_collector_with_no_factories_returns_empty_facts_no_crash() -> Non
 
     assert result["raw_data"]["facts_by_ticker"] == {}
     # 그래도 companies / edges 는 upsert 됨
-    assert len(repo.list_companies()) == 7
-    assert len(repo.list_edges()) == 11
+    assert len(repo.list_companies()) == 13
+    assert len(repo.list_edges()) == 24
 
 
 @pytest.mark.asyncio

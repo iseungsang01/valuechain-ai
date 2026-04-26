@@ -20,38 +20,66 @@ from app.agents.topology.memory_semi import topology_summary
 # ============================================================
 
 
-def test_memory_topology_has_seven_nodes() -> None:
-    """7개 기업 (DB seed 와 일치)."""
-    assert len(MEMORY_SEMICONDUCTOR_TOPOLOGY["nodes"]) == 7
+def test_memory_topology_has_thirteen_nodes() -> None:
+    """13개 기업 (DB seed 와 일치) - 메모리/Foundry + 장비 + 모바일 OEM/팹리스."""
+    assert len(MEMORY_SEMICONDUCTOR_TOPOLOGY["nodes"]) == 13
     tickers = {n["ticker"] for n in MEMORY_SEMICONDUCTOR_TOPOLOGY["nodes"]}
-    expected = {"005930.KS", "000660.KS", "MU", "NVDA", "AMD", "INTC", "TSM"}
+    expected = {
+        # Midstream: 메모리/Foundry
+        "005930.KS", "000660.KS", "MU", "TSM",
+        # Downstream: 기존 팹리스/CPU/GPU
+        "NVDA", "AMD", "INTC",
+        # Upstream: 반도체 장비
+        "ASML", "AMAT", "LRCX",
+        # Downstream: 모바일 OEM / 팹리스
+        "AAPL", "QCOM", "2454.TW",
+    }
     assert tickers == expected
 
 
 def test_memory_topology_has_at_least_ten_edges() -> None:
-    """plan §T2.2 요구: 10여개 엣지."""
+    """plan §T2.2 요구: 10여개 엣지 (확장 후 24개)."""
     assert len(MEMORY_SEMICONDUCTOR_TOPOLOGY["edges"]) >= 10
 
 
 def test_memory_topology_matches_db_seed() -> None:
-    """seed.sql 의 11개 엣지와 정확히 일치."""
+    """seed.sql 의 24개 엣지와 정확히 일치."""
     edges = MEMORY_SEMICONDUCTOR_TOPOLOGY["edges"]
     edge_set = {
         (e["supplier_ticker"], e["buyer_ticker"], e["product_category"]) for e in edges
     }
-    # supabase/seed.sql 의 11개 엣지
+    # supabase/seed.sql 의 24개 엣지 (HBM/DRAM/Foundry + 장비/모바일)
     seed_edges = {
+        # HBM
         ("000660.KS", "NVDA", "HBM"),
         ("005930.KS", "NVDA", "HBM"),
         ("MU", "NVDA", "HBM"),
         ("000660.KS", "AMD", "HBM"),
         ("005930.KS", "AMD", "HBM"),
+        # DRAM_DDR5
         ("000660.KS", "INTC", "DRAM_DDR5"),
         ("005930.KS", "INTC", "DRAM_DDR5"),
         ("MU", "INTC", "DRAM_DDR5"),
+        # FOUNDRY 기존
         ("TSM", "NVDA", "FOUNDRY_COWOS"),
         ("TSM", "AMD", "FOUNDRY_COWOS"),
         ("TSM", "INTC", "FOUNDRY_5NM"),
+        # 신규: 장비 -> 메모리/Foundry
+        ("ASML", "005930.KS", "EUV_LITHOGRAPHY"),
+        ("ASML", "000660.KS", "EUV_LITHOGRAPHY"),
+        ("ASML", "TSM", "EUV_LITHOGRAPHY"),
+        ("AMAT", "005930.KS", "SEMI_EQUIPMENT"),
+        ("AMAT", "MU", "SEMI_EQUIPMENT"),
+        ("LRCX", "000660.KS", "MEMORY_ETCH"),
+        ("LRCX", "MU", "MEMORY_ETCH"),
+        # 신규: TSMC -> 모바일 SoC 팹리스
+        ("TSM", "AAPL", "FOUNDRY_3NM"),
+        ("TSM", "QCOM", "FOUNDRY_4NM"),
+        ("TSM", "2454.TW", "FOUNDRY_4NM"),
+        # 신규: 메모리 3사 -> Apple
+        ("005930.KS", "AAPL", "MOBILE_DRAM"),
+        ("000660.KS", "AAPL", "MOBILE_DRAM"),
+        ("MU", "AAPL", "MOBILE_DRAM"),
     }
     assert edge_set == seed_edges
 
@@ -87,10 +115,14 @@ def test_get_topology_unknown_sector_raises() -> None:
 def test_topology_summary_shape() -> None:
     summary = topology_summary(dict(MEMORY_SEMICONDUCTOR_TOPOLOGY))
     assert summary["sector"] == "memory_semiconductor"
-    assert summary["node_count"] == 7
-    assert summary["edge_count"] == 11
+    assert summary["node_count"] == 13
+    assert summary["edge_count"] == 24
+    # 기존 카테고리
     assert "HBM" in summary["products"]
     assert "DRAM_DDR5" in summary["products"]
+    # 신규 카테고리 - 확장 검증
+    assert "EUV_LITHOGRAPHY" in summary["products"]
+    assert "MOBILE_DRAM" in summary["products"]
 
 
 # ============================================================
@@ -157,13 +189,13 @@ async def test_structure_mapping_populates_topology() -> None:
 
     assert result["topology"] is not None
     assert result["topology"]["sector"] == "memory_semiconductor"
-    assert len(result["topology"]["nodes"]) == 7
-    assert len(result["topology"]["edges"]) == 11
+    assert len(result["topology"]["nodes"]) == 13
+    assert len(result["topology"]["edges"]) == 24
 
     events = result["trace_events"]
     assert events[0]["event_type"] == "agent_start"
     assert events[-1]["event_type"] == "agent_complete"
-    assert events[-1]["payload"]["node_count"] == 7
+    assert events[-1]["payload"]["node_count"] == 13
 
 
 @pytest.mark.asyncio

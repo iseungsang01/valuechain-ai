@@ -6,7 +6,7 @@
  *  2. sector=memory_semiconductor, quarter=2024Q3 (default)
  *  3. "Run Analysis" 클릭 → SSE 연결 + ThoughtPanel 활성화
  *  4. 60초 내 그래프 + 정합성 결과 표시
- *  5. 데모 fixture 기준: 7 노드, 11 엣지, 3 reconciliation_errors
+ *  5. 데모 fixture 기준: 13 노드, 24 엣지, 3 reconciliation_errors
  *
  * 합격 기준 (architecture.md §10 T4.1):
  *  - TTFGraph (Time To First Graph) < 60s
@@ -18,9 +18,9 @@ import { test, expect } from '@playwright/test';
 
 const TTFG_BUDGET_MS = 60_000;
 
-// 백엔드 데모 fixture 가 보장하는 최소 수치
-const EXPECTED_MIN_NODES = 7;
-const EXPECTED_MIN_EDGES = 11;
+// 백엔드 데모 fixture 가 보장하는 최소 수치 (Phase 1 확장: 13 노드 / 24 엣지)
+const EXPECTED_MIN_NODES = 13;
+const EXPECTED_MIN_EDGES = 24;
 const EXPECTED_MIN_RECON_ERRORS = 1;
 
 test.describe('MVP - Memory Semi 2024Q3 workflow', () => {

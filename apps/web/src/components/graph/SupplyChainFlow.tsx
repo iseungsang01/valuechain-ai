@@ -32,11 +32,12 @@ interface HoverState {
   edgeId: string;
 }
 
-/** 단순 grid 레이아웃 - 7개 노드를 3x3 grid 에 배치. V2: dagre. */
+/** 단순 grid 레이아웃 - 노드 수에 따라 cols=ceil(sqrt(n)) 로 적응형 배치. V2: dagre. */
 function gridLayout<T>(items: { id: string; node: T }[]): Array<T & { position: { x: number; y: number } }> {
+  const cols = Math.max(1, Math.ceil(Math.sqrt(items.length)));
   return items.map((entry, index) => {
-    const col = index % 3;
-    const row = Math.floor(index / 3);
+    const col = index % cols;
+    const row = Math.floor(index / cols);
     return {
       ...(entry.node as object),
       position: { x: col * 280, y: row * 220 },
@@ -167,7 +168,7 @@ export function SupplyChainFlow() {
       {nodes.length === 0 ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-foreground/50 z-10 pointer-events-none">
           <p className="text-lg font-medium mb-2">토폴로지 미리보기</p>
-          <p className="text-sm">7개 기업, 11개 거래 관계</p>
+          <p className="text-sm">13개 기업, 24개 거래 관계</p>
           <p className="text-xs mt-4 opacity-70">
             &quot;분석 시작&quot;을 눌러 시작하세요
           </p>

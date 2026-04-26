@@ -203,8 +203,8 @@ async def test_e2e_full_pipeline_runs_through_all_four_nodes() -> None:
 
     # 1. StructureMapper → topology 채움
     assert result["topology"] is not None
-    assert len(result["topology"]["nodes"]) == 7
-    assert len(result["topology"]["edges"]) == 11
+    assert len(result["topology"]["nodes"]) == 13
+    assert len(result["topology"]["edges"]) == 24
 
     # 2. DataCollector → raw_data + repo 영속화
     assert result["raw_data"] is not None
@@ -216,8 +216,8 @@ async def test_e2e_full_pipeline_runs_through_all_four_nodes() -> None:
     # 3. QuantEstimator → quantified + edge_metrics
     assert result["quantified"] is not None
     edge_metrics = result["quantified"]["edge_metrics"]
-    # 모든 11개 엣지가 entry 보유 (revenue 가 None 인 hypothesis 도 포함)
-    assert len(edge_metrics) == 11
+    # 모든 24개 엣지가 entry 보유 (revenue 가 None 인 hypothesis 도 포함)
+    assert len(edge_metrics) == 24
 
     # 적어도 SK Hynix → NVIDIA HBM 엣지는 revenue_usd 가 채워짐
     sk_to_nvda = next(
@@ -248,16 +248,19 @@ async def test_e2e_repo_persists_companies_edges_metrics_after_pipeline() -> Non
 
     await graph.ainvoke(_initial_state(), config=config)
 
-    # 7개 회사 + 11개 엣지
-    assert len(deps.repo.list_companies()) == 7
-    assert len(deps.repo.list_edges()) == 11
+    # 13개 회사 + 24개 엣지
+    assert len(deps.repo.list_companies()) == 13
+    assert len(deps.repo.list_edges()) == 24
 
-    # 2024Q3 edge_metrics 는 데이터가 있는 supplier 의 엣지 수만큼
+    # 2024Q3 edge_metrics 는 데이터가 있는 supplier 의 엣지 수만큼 영속화 (17개)
+    #  - Samsung(005930.KS) supplier 엣지: NVDA HBM, AMD HBM, INTC DDR5, AAPL MOBILE_DRAM = 4
+    #  - SK Hynix(000660.KS) supplier 엣지: NVDA HBM, AMD HBM, INTC DDR5, AAPL MOBILE_DRAM = 4
+    #  - Micron(MU) supplier 엣지: NVDA HBM, INTC DDR5, AAPL MOBILE_DRAM = 3
+    #  - TSMC(TSM) supplier 엣지: NVDA COWOS, AMD COWOS, INTC 5NM, AAPL 3NM, QCOM 4NM, 2454.TW 4NM = 6
+    #  → 4 + 4 + 3 + 6 = 17
+    # ASML/AMAT/LRCX supplier 엣지 7개는 fixture 데이터 부재로 hypothesis(revenue=None) → 영속화 X
     metrics_q3 = deps.repo.list_edge_metrics(quarter="2024Q3")
-    # SK Hynix(2 buyers HBM + 1 INTC DDR5) + Samsung(2 HBM + 1 DDR5)
-    # + Micron(1 NVDA HBM + 1 INTC DDR5) + TSMC(2 COWOS + 1 5NM) = 11
-    # 모든 supplier 가 데이터 있음 → 11개 메트릭 영속화
-    assert len(metrics_q3) == 11
+    assert len(metrics_q3) == 17
 
     # 모든 메트릭이 citation 1개 이상 연결 (Mandatory Grounding)
     for metric in metrics_q3:

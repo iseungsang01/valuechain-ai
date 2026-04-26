@@ -78,6 +78,10 @@ export default function DashboardPage() {
               <option value="2024Q3">2024 Q3</option>
               <option value="2024Q4">2024 Q4</option>
               <option value="2025Q1">2025 Q1</option>
+              <option value="2025Q2">2025 Q2</option>
+              <option value="2025Q3">2025 Q3</option>
+              <option value="2025Q4">2025 Q4</option>
+              <option value="2026Q1">2026 Q1 (exp)</option>
             </select>
           </div>
 

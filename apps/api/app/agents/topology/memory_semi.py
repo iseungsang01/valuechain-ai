@@ -16,7 +16,7 @@ from typing import Any, Final, Literal, TypedDict
 class TopologyNode(TypedDict):
     ticker: str
     name: str
-    country: Literal["KR", "US", "JP", "TW", "CN"]
+    country: Literal["KR", "US", "JP", "TW", "CN", "NL"]
     sector: str
 
 
@@ -33,11 +33,12 @@ class Topology(TypedDict):
     edges: list[TopologyEdge]
 
 
-# 메모리 반도체 supply chain (HBM + DRAM + Foundry)
-# 공시 데이터(DART for KR, EDGAR for US/TW) 가 풍부한 7개 기업
+# 메모리 반도체 supply chain (장비 + 메모리/Foundry + 팹리스/OEM)
+# Phase 1: 7개 → 확장: 13개 기업, upstream(장비)~midstream(메모리/foundry)~downstream(OEM/팹리스) 전체 커버
 MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
     sector="memory_semiconductor",
     nodes=[
+        # ---------- Midstream: 메모리 제조 ----------
         TopologyNode(
             ticker="005930.KS",
             name="Samsung Electronics",
@@ -56,6 +57,11 @@ MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
             country="US",
             sector="memory_semiconductor",
         ),
+        # ---------- Midstream: Foundry ----------
+        TopologyNode(
+            ticker="TSM", name="TSMC", country="TW", sector="memory_semiconductor"
+        ),
+        # ---------- Downstream: 팹리스 / GPU / CPU ----------
         TopologyNode(
             ticker="NVDA",
             name="NVIDIA",
@@ -68,12 +74,49 @@ MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
         TopologyNode(
             ticker="INTC", name="Intel", country="US", sector="memory_semiconductor"
         ),
+        # ---------- Upstream: 반도체 장비 ----------
         TopologyNode(
-            ticker="TSM", name="TSMC", country="TW", sector="memory_semiconductor"
+            ticker="ASML",
+            name="ASML Holding",
+            country="NL",
+            sector="memory_semiconductor",
+        ),
+        TopologyNode(
+            ticker="AMAT",
+            name="Applied Materials",
+            country="US",
+            sector="memory_semiconductor",
+        ),
+        TopologyNode(
+            ticker="LRCX",
+            name="Lam Research",
+            country="US",
+            sector="memory_semiconductor",
+        ),
+        # ---------- Downstream: 모바일 OEM / 팹리스 ----------
+        TopologyNode(
+            ticker="AAPL",
+            name="Apple",
+            country="US",
+            sector="memory_semiconductor",
+        ),
+        TopologyNode(
+            ticker="QCOM",
+            name="Qualcomm",
+            country="US",
+            sector="memory_semiconductor",
+        ),
+        TopologyNode(
+            ticker="2454.TW",
+            name="MediaTek",
+            country="TW",
+            sector="memory_semiconductor",
         ),
     ],
     edges=[
+        # ============================================================
         # HBM: 메모리 3사 -> NVIDIA (AI GPU 필수)
+        # ============================================================
         TopologyEdge(
             supplier_ticker="000660.KS",
             buyer_ticker="NVDA",
@@ -105,7 +148,9 @@ MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
             product_category="HBM",
             lag_quarters=1,
         ),
+        # ============================================================
         # DRAM_DDR5: 메모리 3사 -> Intel (서버용)
+        # ============================================================
         TopologyEdge(
             supplier_ticker="000660.KS",
             buyer_ticker="INTC",
@@ -124,7 +169,9 @@ MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
             product_category="DRAM_DDR5",
             lag_quarters=1,
         ),
-        # FOUNDRY: TSMC -> 팹리스 (CoWoS 패키징 포함)
+        # ============================================================
+        # FOUNDRY: TSMC -> 기존 팹리스 (CoWoS / 5nm)
+        # ============================================================
         TopologyEdge(
             supplier_ticker="TSM",
             buyer_ticker="NVDA",
@@ -142,6 +189,100 @@ MEMORY_SEMICONDUCTOR_TOPOLOGY: Final[Topology] = Topology(
             buyer_ticker="INTC",
             product_category="FOUNDRY_5NM",
             lag_quarters=2,
+        ),
+        # ============================================================
+        # 신규 - Upstream 장비 -> 메모리/Foundry
+        # 장비 lead time 길어서 lag_quarters 3-4
+        # ============================================================
+        # ASML EUV 노광 장비 (Samsung HBM 라인 / SK Hynix M16 / TSMC N3 EUV)
+        TopologyEdge(
+            supplier_ticker="ASML",
+            buyer_ticker="005930.KS",
+            product_category="EUV_LITHOGRAPHY",
+            lag_quarters=4,
+        ),
+        TopologyEdge(
+            supplier_ticker="ASML",
+            buyer_ticker="000660.KS",
+            product_category="EUV_LITHOGRAPHY",
+            lag_quarters=4,
+        ),
+        TopologyEdge(
+            supplier_ticker="ASML",
+            buyer_ticker="TSM",
+            product_category="EUV_LITHOGRAPHY",
+            lag_quarters=4,
+        ),
+        # Applied Materials - 증착/식각/CMP 등 종합 장비
+        TopologyEdge(
+            supplier_ticker="AMAT",
+            buyer_ticker="005930.KS",
+            product_category="SEMI_EQUIPMENT",
+            lag_quarters=3,
+        ),
+        TopologyEdge(
+            supplier_ticker="AMAT",
+            buyer_ticker="MU",
+            product_category="SEMI_EQUIPMENT",
+            lag_quarters=3,
+        ),
+        # Lam Research - 메모리 식각/CVD 특화
+        TopologyEdge(
+            supplier_ticker="LRCX",
+            buyer_ticker="000660.KS",
+            product_category="MEMORY_ETCH",
+            lag_quarters=3,
+        ),
+        TopologyEdge(
+            supplier_ticker="LRCX",
+            buyer_ticker="MU",
+            product_category="MEMORY_ETCH",
+            lag_quarters=3,
+        ),
+        # ============================================================
+        # 신규 - TSMC -> 팹리스 (모바일 SoC)
+        # ============================================================
+        # Apple A/M 시리즈 (TSMC N3/N4)
+        TopologyEdge(
+            supplier_ticker="TSM",
+            buyer_ticker="AAPL",
+            product_category="FOUNDRY_3NM",
+            lag_quarters=2,
+        ),
+        # Qualcomm Snapdragon (TSMC N4)
+        TopologyEdge(
+            supplier_ticker="TSM",
+            buyer_ticker="QCOM",
+            product_category="FOUNDRY_4NM",
+            lag_quarters=2,
+        ),
+        # MediaTek Dimensity (TSMC N4)
+        TopologyEdge(
+            supplier_ticker="TSM",
+            buyer_ticker="2454.TW",
+            product_category="FOUNDRY_4NM",
+            lag_quarters=2,
+        ),
+        # ============================================================
+        # 신규 - 메모리 3사 -> Apple (모바일 LPDDR / NAND)
+        # ============================================================
+        TopologyEdge(
+            supplier_ticker="005930.KS",
+            buyer_ticker="AAPL",
+            product_category="MOBILE_DRAM",
+            lag_quarters=1,
+        ),
+        TopologyEdge(
+            supplier_ticker="000660.KS",
+            buyer_ticker="AAPL",
+            product_category="MOBILE_DRAM",
+            lag_quarters=1,
+        ),
+        TopologyEdge(
+            supplier_ticker="MU",
+            buyer_ticker="AAPL",
+            product_category="MOBILE_DRAM",
+            lag_quarters=1,
         ),
     ],
 )
