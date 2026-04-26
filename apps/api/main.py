@@ -52,9 +52,12 @@ def create_app() -> FastAPI:
     )
 
     # CORS - 프론트엔드 (Vercel) ↔ API (Railway) 허용
+    # - allow_origins: 정확히 일치하는 오리진 (production, localhost)
+    # - allow_origin_regex: vercel preview/branch 배포 (*.vercel.app) 자동 허용
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins_list,
+        allow_origin_regex=settings.cors_origin_regex_or_none,
         allow_credentials=True,
         allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["*"],

@@ -50,13 +50,25 @@ class Settings(BaseSettings):
 
     # ---------- CORS ----------
     cors_origins: str = Field(
-        default="http://localhost:3000,http://localhost:8000",
-        description="CORS 허용 오리진 (콤마 구분)",
+        default="http://localhost:3000,http://localhost:8000,https://contest2-web.vercel.app",
+        description="CORS 허용 오리진 (콤마 구분). production 도메인 + 로컬 dev.",
+    )
+    cors_origin_regex: str = Field(
+        default=r"^https://([a-z0-9-]+\.)*vercel\.app$",
+        description=(
+            "정규식 기반 CORS 허용 패턴. 기본값은 모든 *.vercel.app (preview/branch 배포 포함). "
+            "비활성화하려면 빈 문자열로 설정."
+        ),
     )
 
     @property
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def cors_origin_regex_or_none(self) -> str | None:
+        """빈 문자열이면 None - FastAPI 가 정규식 매칭을 비활성화하도록."""
+        return self.cors_origin_regex.strip() or None
 
     @property
     def is_production(self) -> bool:
